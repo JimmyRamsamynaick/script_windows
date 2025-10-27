@@ -72,8 +72,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 Le projet inclut un petit panneau de mini-jeux en console:
 
-- `Space Invader` (WIP)
-- `Nombre Mystère`
+- `Space Invader` — déplacement `←/→`, tir `Espace`, `Q` pour quitter.
+- `Nombre Mystère` — entrez un nombre (1..100), `q` pour quitter.
 
 Lancement direct:
 
@@ -82,6 +82,19 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\mini_jeu\mini_jeu.ps1
 ```
 
 Ou depuis le menu principal (`5. Mini Jeux`).
+
+Commandes directes:
+
+```powershell
+# Space Invader (jeu)
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\mini_jeu\game.ps1
+
+# Space Invader (menu dédié du mini-jeu)
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\mini_jeu\space_invader.ps1
+
+# Nombre Mystère
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\mini_jeu\guess.ps1
+```
 
 ### Dépannage
 
