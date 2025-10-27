@@ -1,0 +1,36 @@
+# Fichiers temporaires Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Fichiers système
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*.swo
+
+# Fichiers PowerShell
+*.ps1xml
+*.psc1
+
+# Dossiers de sauvegarde
+backup/
+temp/
+logs/
+
+# Fichiers de configuration sensibles
+config.ini
+*.key
+*.pem
+*.p12
+
+# Dossiers IDE
+.vscode/
+.idea/
+
+# Fichiers de test
+test_output/
+*.test
