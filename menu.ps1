@@ -162,6 +162,7 @@ function Show-MainMenu {
         Write-Host '2. Scripts d''Alex' -ForegroundColor White
         Write-Host '3. Scripts de Jimmy' -ForegroundColor White
         Write-Host '4. Lancer un script par chemin' -ForegroundColor White
+        Write-Host '5. Space Invader' -ForegroundColor White
         Write-Host '0. Quitter' -ForegroundColor Red
         Write-Host ''
 
@@ -177,7 +178,16 @@ function Show-MainMenu {
                 Run-Script -ScriptPath $path -RawArgs $args
                 Read-Host 'Appuyez sur Entrée pour continuer'
             }
-            '0' { Write-Log 'Fermeture du menu.' -Level 'INFO'; break }
+            '5' {
+                $spacePath = Join-Path $script:RootPath 'space_invader/space_invader.ps1'
+                if (-not (Test-Path -LiteralPath $spacePath)) {
+                    Write-Host 'Space Invader non disponible.' -ForegroundColor Red
+                    Start-Sleep -Seconds 1
+                } else {
+                    Run-Script -ScriptPath $spacePath -RawArgs ''
+                }
+            }
+            '0' { Write-Log 'Fermeture du menu.' -Level 'INFO'; return }
             default {
                 Write-Host 'Choix invalide.' -ForegroundColor Red
                 Start-Sleep -Seconds 1
