@@ -54,9 +54,9 @@ function Write-Title {
     Clear-Host
     if($NoLogo){return}
     $lines=@(
-        '╔══════════════════════════════════════════════╗',
-        '║                 MINI - JEUX                  ║',
-        '╚══════════════════════════════════════════════╝',
+        '╔════════════════════════════════════════════════════════════╗',
+        '║                      Panneau des Mini-Jeux                  ║',
+        '╚════════════════════════════════════════════════════════════╝',
         ''
     )
     foreach($l in $lines){ Write-Host $l -ForegroundColor Cyan }
@@ -75,10 +75,12 @@ function Run-Child([string]$path){
 function Show-Menu {
     do{
         Write-Title
+        Write-Host '────────── Options ──────────' -ForegroundColor DarkCyan
         Write-Host '1. Snake' -ForegroundColor White
         Write-Host '2. Space Invader' -ForegroundColor White
         Write-Host '3. Nombre Mystère' -ForegroundColor White
         Write-Host '0. Revenir en arrière' -ForegroundColor Red
+        Write-Host '──────────────────────────────' -ForegroundColor DarkCyan
         Write-Host ''
         $choice=Read-Host 'Votre choix'
         switch($choice){

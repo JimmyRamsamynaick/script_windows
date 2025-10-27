@@ -18,8 +18,18 @@ function Draw-Frame{
     for($y=0;$y -lt $height;$y++){
         $line='║' + (' ' * $width) + '║'
         $chars=$line.ToCharArray()
-        foreach($seg in $snake){ $idx=$seg.X+1; if($idx -lt $chars.Length){ $chars[$idx]='█' } }
-        $chars[$food.X+1]='■'
+        # dessiner les segments du serpent seulement sur la ligne courante
+        foreach($seg in $snake){
+            if($seg.Y -eq $y){
+                $idx=$seg.X+1
+                if($idx -ge 1 -and $idx -lt $chars.Length){ $chars[$idx]='█' }
+            }
+        }
+        # dessiner la nourriture sur la ligne courante
+        if($food.Y -eq $y){
+            $fidx=$food.X+1
+            if($fidx -ge 1 -and $fidx -lt $chars.Length){ $chars[$fidx]='●' }
+        }
         Write-Host ([string]::new($chars))
     }
     Write-Host ('╚' + ('═' * $width) + '╝')
@@ -55,7 +65,12 @@ function Step{
     $snake = ,$head + $snake
     if($head.X -eq $food.X -and $head.Y -eq $food.Y){
         $score+=10
-        $food=[PSCustomObject]@{X=(Get-Random -Minimum 1 -Maximum ($width-2));Y=(Get-Random -Minimum 2 -Maximum ($height-2))}
+        # respawn nourriture en dehors du serpent
+        do{
+            $food=[PSCustomObject]@{X=(Get-Random -Minimum 0 -Maximum ($width));Y=(Get-Random -Minimum 0 -Maximum ($height))}
+            $collides=$false
+            foreach($seg in $snake){ if($seg.X -eq $food.X -and $seg.Y -eq $food.Y){ $collides=$true; break } }
+        }while($collides)
     }else{
         $snake=$snake[0..($snake.Count-2)]
     }
