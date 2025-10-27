@@ -37,7 +37,8 @@ function Draw-Frame{
 }
 
 function Read-Input{
-    if([Console]::KeyAvailable){
+    # Draine tout le buffer clavier pour ne pas rater les flèches
+    while([Console]::KeyAvailable){
         $key=[Console]::ReadKey($true).Key
         switch($key){
             ([ConsoleKey]::LeftArrow)   { if($dir -ne 'Right'){ $dir='Left' } }
@@ -49,6 +50,7 @@ function Read-Input{
             ([ConsoleKey]::W)           { if($dir -ne 'Down'){ $dir='Up' } }
             ([ConsoleKey]::S)           { if($dir -ne 'Up'){ $dir='Down' } }
             ([ConsoleKey]::Q)           { throw 'Quit' }
+            default { }
         }
     }
 }
@@ -67,11 +69,11 @@ function Step{
     foreach($seg in $snake){ if($seg.X -eq $head.X -and $seg.Y -eq $head.Y){ throw 'GameOver' } }
     # nourriture
     $snake = ,$head + $snake
-    if($head.X -eq $food.X -and $head.Y -eq $food.Y){
+    if([int]$head.X -eq [int]$food.X -and [int]$head.Y -eq [int]$food.Y){
         $score+=10
         # respawn nourriture en dehors du serpent
         do{
-            $food=[PSCustomObject]@{X=(Get-Random -Minimum 0 -Maximum ($width));Y=(Get-Random -Minimum 0 -Maximum ($height))}
+            $food=[PSCustomObject]@{X=(Get-Random -Minimum 0 -Maximum $width);Y=(Get-Random -Minimum 0 -Maximum $height)}
             $collides=$false
             foreach($seg in $snake){ if($seg.X -eq $food.X -and $seg.Y -eq $food.Y){ $collides=$true; break } }
         }while($collides)

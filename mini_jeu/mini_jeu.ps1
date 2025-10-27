@@ -68,8 +68,13 @@ function Run-Child([string]$path){
         Read-Host 'Appuyez sur Entrée pour revenir'
         return
     }
-    $ps=Get-PowerShellCommand
-    Start-Process -FilePath $ps -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$path`"" -Wait -NoNewWindow
+    try{
+        # Exécution inline pour une meilleure capture des entrées clavier
+        & $path
+    }catch{
+        Write-Host "Erreur lors de l'exécution: $($_.Exception.Message)" -ForegroundColor Red
+        Read-Host 'Appuyez sur Entrée pour revenir'
+    }
 }
 
 function Show-Menu {

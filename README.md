@@ -25,6 +25,7 @@ Projet-PowerShell-Windows/
 │   └── test_reseaux.ps1       # Outils de test réseau de base
 │
 ├── menu.ps1                   # Menu principal d'accès aux différents scripts
+├── mini_jeu/                  # Mini-jeux (Snake, Space Invader, Nombre Mystère)
 ├── README.md                  # Présentation du projet
 ├── LICENSE                    # Licence MIT
 ├── CONTRIBUTING.md            # Guide de contribution
@@ -67,6 +68,29 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 .\menu.ps1
 ```
 
+### Mini-Jeux
+
+Le projet inclut un petit panneau de mini-jeux en console:
+
+- `Snake` (flèches ou WASD, `Q` pour quitter)
+- `Space Invader` (WIP)
+- `Nombre Mystère`
+
+Lancement direct:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\mini_jeu\mini_jeu.ps1
+```
+
+Ou depuis le menu principal (`5. Mini Jeux`).
+
+### Dépannage (clavier / flèches)
+
+- Si les flèches ne sont pas reconnues, utilisez `WASD` comme alternative.
+- Préférez l’exécution inline du mini-jeu (défaut actuel) au lieu d’un `Start-Process`, pour une meilleure capture clavier.
+- Sur certaines consoles, `QuickEdit` peut bloquer l’entrée clavier quand une sélection est active — appuyez sur `Échap` pour revenir.
+- PowerShell 7 (`pwsh`) est recommandé pour une meilleure compatibilité.
+
 ## 📋 Scripts disponibles
 
 ### 👤 Sameer - Outils système généraux
@@ -95,6 +119,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - ✅ **Paramètres configurables** via fichiers de configuration
 - ✅ **Compatibilité** Windows 10/11 et Server
 - ✅ **Documentation** intégrée (Get-Help)
+- ✅ **Mini-jeux** en console pour démonstrations et tests (Snake, etc.)
 
 ## 💡 Exemples d'utilisation
 
