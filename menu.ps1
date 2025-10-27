@@ -198,7 +198,7 @@ function Show-MainMenu {
         Write-Host '2. Scripts d''Alex' -ForegroundColor White
         Write-Host '3. Scripts de Jimmy' -ForegroundColor White
         Write-Host '4. Lancer un script par chemin' -ForegroundColor White
-        Write-Host '5. Space Invader' -ForegroundColor White
+        Write-Host '5. Mini Jeux' -ForegroundColor White
         Write-Host '0. Quitter' -ForegroundColor Red
         Write-Host ''
 
@@ -215,13 +215,13 @@ function Show-MainMenu {
                 Read-Host 'Appuyez sur Entrée pour continuer'
             }
             '5' {
-                $spacePath = Join-Path $script:RootPath 'space_invader/space_invader.ps1'
-                if (-not (Test-Path -LiteralPath $spacePath)) {
-                    Write-Host 'Space Invader non disponible.' -ForegroundColor Red
+                $miniPath = Join-Path $script:RootPath 'mini_jeu/mini_jeu.ps1'
+                if (-not (Test-Path -LiteralPath $miniPath)) {
+                    Write-Host 'Mini Jeux non disponible.' -ForegroundColor Red
                     Start-Sleep -Seconds 1
                 } else {
-                    Show-Countdown -Seconds 3 -Text 'Lancement de Space Invader dans'
-                    Run-Script -ScriptPath $spacePath -RawArgs ''
+                    Show-Countdown -Seconds 3 -Text 'Ouverture des Mini Jeux dans'
+                    Run-Script -ScriptPath $miniPath -RawArgs ''
                 }
             }
             '0' { Write-Log 'Fermeture du menu.' -Level 'INFO'; Show-Countdown -Seconds 3 -Text 'Fermeture dans'; return }
