@@ -194,12 +194,14 @@ function Show-ContributorMenu {
 function Show-MainMenu {
     do {
         Show-Header
+        Write-Host '────────── Options ──────────' -ForegroundColor DarkCyan
         Write-Host '1. Scripts de Sameer' -ForegroundColor White
         Write-Host '2. Scripts d''Alex' -ForegroundColor White
         Write-Host '3. Scripts de Jimmy' -ForegroundColor White
         Write-Host '4. Lancer un script par chemin' -ForegroundColor White
         Write-Host '5. Mini Jeux' -ForegroundColor White
         Write-Host '0. Quitter' -ForegroundColor Red
+        Write-Host '──────────────────────────────' -ForegroundColor DarkCyan
         Write-Host ''
 
         $choice = Read-Host 'Votre choix'

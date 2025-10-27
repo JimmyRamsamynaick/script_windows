@@ -40,11 +40,15 @@ function Read-Input{
     if([Console]::KeyAvailable){
         $key=[Console]::ReadKey($true).Key
         switch($key){
-            'LeftArrow'  { if($dir -ne 'Right'){ $dir='Left' } }
-            'RightArrow' { if($dir -ne 'Left'){ $dir='Right' } }
-            'UpArrow'    { if($dir -ne 'Down'){ $dir='Up' } }
-            'DownArrow'  { if($dir -ne 'Up'){ $dir='Down' } }
-            'Q'          { throw 'Quit' }
+            ([ConsoleKey]::LeftArrow)   { if($dir -ne 'Right'){ $dir='Left' } }
+            ([ConsoleKey]::RightArrow)  { if($dir -ne 'Left'){ $dir='Right' } }
+            ([ConsoleKey]::UpArrow)     { if($dir -ne 'Down'){ $dir='Up' } }
+            ([ConsoleKey]::DownArrow)   { if($dir -ne 'Up'){ $dir='Down' } }
+            ([ConsoleKey]::A)           { if($dir -ne 'Right'){ $dir='Left' } }
+            ([ConsoleKey]::D)           { if($dir -ne 'Left'){ $dir='Right' } }
+            ([ConsoleKey]::W)           { if($dir -ne 'Down'){ $dir='Up' } }
+            ([ConsoleKey]::S)           { if($dir -ne 'Up'){ $dir='Down' } }
+            ([ConsoleKey]::Q)           { throw 'Quit' }
         }
     }
 }
