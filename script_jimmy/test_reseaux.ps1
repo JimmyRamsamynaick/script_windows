@@ -257,15 +257,23 @@ function Test-Traceroute {
                 
                 if ($trace.TraceRoute) {
                     foreach ($hopResult in $trace.TraceRoute) {
+                        # Calculer le hostname séparément (try/catch non autorisé dans un hashtable inline)
+                        $hostname = $hopResult
+                        try {
+                            $hostname = [System.Net.Dns]::GetHostEntry($hopResult).HostName
+                        } catch {
+                            $hostname = $hopResult
+                        }
+
                         $hopInfo = @{
                             Hop = $hop
                             Address = $hopResult
-                            Hostname = try { [System.Net.Dns]::GetHostEntry($hopResult).HostName } catch { $hopResult }
+                            Hostname = $hostname
                             ResponseTime = "N/A"
                         }
                         
                         $results += $hopInfo
-                        Write-Log "Saut $hop : $($hopResult) ($($hopInfo.Hostname))" -Level "INFO"
+                        Write-Log "Saut $hop : $($hopResult) ($hostname)" -Level "INFO"
                     }
                 }
                 
@@ -525,7 +533,7 @@ function Test-Bandwidth {
         [int]$Port = 80
     )
     
-    Write-Log "Test de bande passante vers $TargetHost:$Port" -Level "INFO"
+    Write-Log "Test de bande passante vers ${TargetHost}:$Port" -Level "INFO"
     
     $results = @{
         Target = $TargetHost
@@ -560,7 +568,7 @@ function Test-Bandwidth {
         if ($Port -eq 80 -or $Port -eq 443) {
             try {
                 $protocol = if ($Port -eq 443) { "https" } else { "http" }
-                $url = "$protocol://$TargetHost/"
+                $url = "${protocol}://${TargetHost}/"
                 
                 $startTime = Get-Date
                 $response = Invoke-WebRequest -Uri $url -TimeoutSec 10 -ErrorAction Stop
@@ -807,7 +815,7 @@ function Test-SecurityHeaders {
                 ($protocol -eq "https" -and $securityResults.OpenPorts -contains 443)) {
                 
                 try {
-                    $uri = "$protocol://$TargetHost"
+                    $uri = "${protocol}://${TargetHost}"
                     $response = Invoke-WebRequest -Uri $uri -TimeoutSec 10 -ErrorAction Stop
                     
                     foreach ($header in $securityHeaders) {
