@@ -38,6 +38,35 @@ function Get-PowerShellCommand {
     return 'powershell'
 }
 
+function Show-Spinner {
+    param(
+        [string]$Text = 'Chargement',
+        [int]$Seconds = 2
+    )
+    $frames = @('|','/','-','\')
+    $end = [DateTime]::UtcNow.AddSeconds($Seconds)
+    Write-Host $Text -ForegroundColor Yellow
+    while ([DateTime]::UtcNow -lt $end) {
+        foreach ($f in $frames) {
+            Write-Host ("`r${Text} ${f}   ") -NoNewline -ForegroundColor Yellow
+            Start-Sleep -Milliseconds 120
+        }
+    }
+    Write-Host ("`r${Text} ✔   ") -ForegroundColor Green
+}
+
+function Show-Countdown {
+    param(
+        [int]$Seconds = 3,
+        [string]$Text = 'Démarrage dans'
+    )
+    for ($s=$Seconds; $s -ge 1; $s--) {
+        Write-Host ("`r${Text}: ${s} ") -NoNewline -ForegroundColor Magenta
+        Start-Sleep -Seconds 1
+    }
+    Write-Host "`r${Text}: GO!   " -ForegroundColor Green
+}
+
 function Run-Game {
     if (-not (Test-Path -LiteralPath $script:GamePath)) {
         Write-Host "Jeu introuvable: $script:GamePath" -ForegroundColor Red
@@ -56,8 +85,8 @@ function Show-Menu {
         Write-Host ''
         $choice = Read-Host 'Votre choix'
         switch ($choice) {
-            '1' { Run-Game }
-            '0' { Write-Host 'Retour...' -ForegroundColor Yellow; return }
+            '1' { Show-Countdown -Seconds 3 -Text 'Lancement du jeu dans'; Show-Spinner -Text 'Chargement du jeu' -Seconds 2; Run-Game }
+            '0' { Write-Host 'Retour...' -ForegroundColor Yellow; Show-Countdown -Seconds 3 -Text 'Retour au menu dans'; return }
             default { Write-Host 'Choix invalide.' -ForegroundColor Red; Start-Sleep -Seconds 1 }
         }
     } while ($true)

@@ -50,6 +50,40 @@ function Write-Log {
     }
 }
 
+# Animations de confort (spinner, barre de progression, décompte)
+function Show-Spinner {
+    param([string]$Text = 'Chargement', [int]$Seconds = 2)
+    $frames = @('|','/','-','\\')
+    $end = (Get-Date).AddSeconds($Seconds)
+    $i = 0
+    while ((Get-Date) -lt $end) {
+        Write-Host ("`r$Text " + $frames[$i % $frames.Length]) -NoNewline -ForegroundColor Yellow
+        Start-Sleep -Milliseconds 120
+        $i++
+    }
+    Write-Host "`r$Text ✓       " -ForegroundColor Green
+}
+
+function Show-ProgressBar {
+    param([string]$Text = 'Préparation', [int]$Steps = 20, [int]$DelayMs = 60)
+    for ($i=1; $i -le $Steps; $i++) {
+        $bar = ('#' * $i).PadRight($Steps,'-')
+        $pct = [int](($i/$Steps)*100)
+        Write-Host ("`r$Text [${bar}] ${pct}%") -NoNewline -ForegroundColor Cyan
+        Start-Sleep -Milliseconds $DelayMs
+    }
+    Write-Host ''
+}
+
+function Show-Countdown {
+    param([int]$Seconds = 3, [string]$Text = 'Décompte')
+    for ($s=$Seconds; $s -ge 1; $s--) {
+        Write-Host ("`r${Text}: ${s} ") -NoNewline -ForegroundColor Magenta
+        Start-Sleep -Seconds 1
+    }
+    Write-Host "`r${Text}: GO!   " -ForegroundColor Green
+}
+
 function Get-PowerShellCommand {
     if (Get-Command -Name pwsh -ErrorAction SilentlyContinue) {
         return 'pwsh'
@@ -82,9 +116,11 @@ function Run-Script {
     if ($RawArgs) { $argList = "$argList $RawArgs" }
 
     Write-Log "Lancement: $psCmd $argList" -Level 'INFO'
+    Show-Spinner -Text 'Préparation' -Seconds 1
     try {
         Start-Process -FilePath $psCmd -ArgumentList $argList -Wait -NoNewWindow
         Write-Log "Exécution terminée pour $ScriptPath" -Level 'SUCCESS'
+        Show-ProgressBar -Text 'Retour au menu' -Steps 15 -DelayMs 40
     } catch {
         Write-Log "Erreur d'exécution: $($_.Exception.Message)" -Level 'ERROR'
     }
@@ -104,9 +140,9 @@ function List-Scripts {
 function Show-Header {
     if ($NoLogo) { return }
     Clear-Host
-    Write-Host '==========================================' -ForegroundColor DarkCyan
-    Write-Host '  PowerShell Tools Panel for Windows' -ForegroundColor Cyan
-    Write-Host '==========================================' -ForegroundColor DarkCyan
+    Write-Host '╔══════════════════════════════════════════╗' -ForegroundColor DarkCyan
+    Write-Host '║   PowerShell Tools Panel for Windows     ║' -ForegroundColor Cyan
+    Write-Host '╚══════════════════════════════════════════╝' -ForegroundColor DarkCyan
     Write-Host "Racine: $script:RootPath" -ForegroundColor Gray
     Write-Host "Logs:   $script:LogFile" -ForegroundColor Gray
     Write-Host ''
@@ -184,10 +220,11 @@ function Show-MainMenu {
                     Write-Host 'Space Invader non disponible.' -ForegroundColor Red
                     Start-Sleep -Seconds 1
                 } else {
+                    Show-Countdown -Seconds 3 -Text 'Lancement de Space Invader dans'
                     Run-Script -ScriptPath $spacePath -RawArgs ''
                 }
             }
-            '0' { Write-Log 'Fermeture du menu.' -Level 'INFO'; return }
+            '0' { Write-Log 'Fermeture du menu.' -Level 'INFO'; Show-Countdown -Seconds 3 -Text 'Fermeture dans'; return }
             default {
                 Write-Host 'Choix invalide.' -ForegroundColor Red
                 Start-Sleep -Seconds 1
